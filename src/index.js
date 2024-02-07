@@ -47,7 +47,6 @@ const pizzaData = [
   },
 ];
 
-//main function
 function App() {
   return (
     <div className="container">
@@ -67,37 +66,39 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
+
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredient="Tomato, mozarella, spinach, and ricotta cheese"
-        photoName="pizzas/spinaci.jpg"
-        price={10}
-      />
 
-      <Pizza
-        name="Pizza Funghi"
-        ingredient="Tomato, mozarella, mushrooms, and onion"
-        price={12}
-        photoName="pizzas/funghi.jpg"
-      />
+      {numPizzas > 0 ? (
+        <>
+          <p>Authentic Italian cuisine.</p>
+          <ul className="pizzas">
+            {pizzas.map((pizza) => (
+              <Pizza pizzaObject={pizza} key={pizza.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We are still working on our menu. Please come back later.</p>
+      )}
     </main>
   );
 }
 
-//nested function
-function Pizza(props) {
+function Pizza({ pizzaObject }) {
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
+    <li className={`pizza ${pizzaObject.soldOut ? "sold-out" : ""}`}>
+      <img src={pizzaObject.photoName} alt={pizzaObject.name} />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredient}</p>
-        <span>{props.price + 3}</span>
+        <h3>{pizzaObject.name}</h3>
+        <p>{pizzaObject.ingredients}</p>
+        <span>{pizzaObject.soldOut ? "SOLD OUT" : pizzaObject.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -109,12 +110,24 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()} We're currently open!
+      {isOpen ? (
+        <Order />
+      ) : (
+        <p>We are happy to welcome you between {openHour} and 11:00 PM</p>
+      )}
     </footer>
   );
 }
 
-//initial call targetting root
+function Order() {
+  return (
+    <div className="order">
+      <p>We're open until 11:00 PM. Come visit us or order online. </p>
+      <button className="btn">Order</button>
+    </div>
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
