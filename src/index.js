@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+import { Header } from "./Header";
+import { Menu } from "./Menu";
+import { Footer } from "./Footer";
+import { ShoppingCart } from "./ShoppingCart";
 
-const pizzaData = [
+export const pizzaData = [
   {
     name: "Focaccia",
     ingredients: "Bread with italian olive oil and rosemary",
@@ -75,119 +79,9 @@ function App() {
     <div className="container">
       <Header />
       <Menu addToCart={addToCart} />
-      <ShoppingCart cart={cart} />
+      <ShoppingCart cart={cart} setCart={setCart} />
       <Footer />
     </div>
-  );
-}
-
-function Header() {
-  return (
-    <header className="header">
-      <h1>Fast React Pizza Co.</h1>
-    </header>
-  );
-}
-
-function Menu({ addToCart }) {
-  const pizzas = pizzaData;
-  const numPizzas = pizzas.length;
-
-  return (
-    <main className="menu">
-      <h2>Our Menu</h2>
-
-      {numPizzas > 0 ? (
-        <>
-          <p>Authentic Italian cuisine.</p>
-          <ul className="pizzas">
-            {pizzas.map((pizza) => (
-              <Pizza
-                pizzaObject={pizza}
-                key={pizza.name}
-                addToCart={addToCart}
-              />
-            ))}
-          </ul>
-        </>
-      ) : (
-        <p>We are still working on our menu. Please come back later.</p>
-      )}
-    </main>
-  );
-}
-
-function Pizza({ pizzaObject, addToCart }) {
-  return (
-    <li className={`pizza ${pizzaObject.soldOut ? "sold-out" : ""}`}>
-      <img src={pizzaObject.photoName} alt={pizzaObject.name} />
-      <div>
-        <h3>{pizzaObject.name}</h3>
-        <p>{pizzaObject.ingredients}</p>
-        <span>{pizzaObject.soldOut ? "SOLD OUT" : pizzaObject.price}</span>
-        {!pizzaObject.soldOut && (
-          <button className="btn-order" onClick={() => addToCart(pizzaObject)}>
-            Add to cart
-          </button>
-        )}
-      </div>
-    </li>
-  );
-}
-
-function Footer() {
-  const hour = new Date().getHours();
-  const openHour = 12;
-  const closeHour = 22;
-  const isOpen = hour >= openHour && hour <= closeHour;
-
-  return (
-    <footer className="footer">
-      {isOpen ? (
-        <Order />
-      ) : (
-        <p>Your order can be picked up between {openHour} PM and 11:00 PM</p>
-      )}
-    </footer>
-  );
-}
-
-function Order() {
-  return (
-    <div className="order">
-      <p>We're open until 11:00 PM. Come visit us or order online. </p>
-    </div>
-  );
-}
-
-function ShoppingCart({ cart }) {
-  return (
-    <div>
-      {cart.length > 0 && (
-        <div className="menu">
-          <h2>Order</h2>
-          <ul className="pizzas">
-            {cart.map((pizza) => (
-              <CartItem pizzaObject={pizza} key={pizza.name} />
-            ))}
-          </ul>
-          <button className="btn">Place Order</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function CartItem({ pizzaObject }) {
-  return (
-    <li className={`pizza ${pizzaObject.soldOut ? "sold-out" : ""}`}>
-      <img src={pizzaObject.photoName} alt={pizzaObject.name} />
-      <div>
-        <h3>{pizzaObject.name}</h3>
-        <p>{pizzaObject.ingredients}</p>
-        <p>Qty: {pizzaObject.qty}</p>
-      </div>
-    </li>
   );
 }
 
